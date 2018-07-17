@@ -141,9 +141,16 @@ span.number {
 }
 
 /* leaflet map */
-#mapid { 
+#map { 
     height: 400px;
     margin-bottom: 40px;
+}
+
+#menu {
+    /* position: absolute; */
+    background: #fff;
+    padding: 10px;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .legend {

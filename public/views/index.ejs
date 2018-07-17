@@ -10,20 +10,22 @@
 
   <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
   <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/assets/lib/leaflet/leaflet.css" />
-  
-  <script src="/assets/lib/leaflet/leaflet.js"></script>
-  <script src="https//maps.google.com/maps/api/js?v=3&sensor=false"></script>
-  <script src="/assets/lib/leaflet/Google.js"></script>
-  <script src="/assets/data/countries.geojson"></script>
-  
   <script src="/assets/lib/jquery/jquery-3.3.1.js"></script>
   <script src="/assets/lib/jquery/jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
   <script src="/assets/lib/bootstrap/js/bootstrap.min.js"></script>
-  
+
+  <script src="/assets/lib/mapbox/mapbox-gl.js"></script>
+  <link rel="stylesheet" href="/assets/lib/mapbox/mapbox-gl.css">
+
+  <link rel="stylesheet" href="/assets/lib/leaflet/leaflet.css" />
+  <!-- <link href='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' /> -->
+  <script src="/assets/lib/leaflet/leaflet.js"></script>
+  <!-- <script src="https//maps.google.com/maps/api/js?v=3&sensor=false"></script> -->
+  <!-- <script src="/assets/lib/leaflet/Google.js"></script> -->
+  <!-- <script src="/assets/data/countries.geojson"></script> -->
   <!-- <script src="/JS/navbar.js"> </script> -->
   <!-- <script src="/JS/facebook.js"> </script> -->
   <!-- <script src="/JS/map.js"> </script> -->
@@ -31,140 +33,296 @@
 </body>
 <!-- NavBar Starts -->
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <!-- Brand -->
-    <a class="navbar-brand" href="#">CrimeAI</a>
-  
-    <!-- Toggler/collapsibe Button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <!-- Navbar links -->
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Login</a>
-        </li> 
-      </ul>
-    </div> 
-  </nav>
+  <!-- Brand -->
+  <a class="navbar-brand" href="#">CrimeAI</a>
+
+  <!-- Toggler/collapsibe Button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar links -->
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Contact</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Login</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 <!-- NavBar Ends -->
 
 <!-- Home starts -->
 
 <!-- Top Bar Message starts -->
-  <div class="jumbotron text-center">
-    <img src="https://thumbs.dreamstime.com/b/sitting-duck-saying-cartoon-illustration-37614840.jpg" alt="Sitting Duck" style="width:128px;height:128px;">
-    <h1>Stop Being The Sitting Duck</h1>
-    <p1>Never Turn A Blind Eye To Crime.</p1>
-    <p>A joint effort will reduce crime in our community.</p> 
-  </div>
-<!-- Top Bar Message ends -->   
-  <!-- <div class="container">
+<div class="jumbotron text-center">
+  <img src="https://thumbs.dreamstime.com/b/sitting-duck-saying-cartoon-illustration-37614840.jpg" alt="Sitting Duck" style="width:128px;height:128px;">
+  <h1>Stop Being The Sitting Duck</h1>
+  <p1>Never Turn A Blind Eye To Crime.</p1>
+  <p>A joint effort will reduce crime in our community.</p>
+</div>
+<!-- Top Bar Message ends -->
+<!-- <div class="container">
       <img src="http://www.cartographicperspectives.org/index.php/journal/article/viewFile/423/479/2245" alt="Google Map's HeatMaps" style="width:100%;height:100%;">
   </div> -->
-  <div class="container">
-    <div id="mapid">
-
-    </div>
+<div class="container">
+  <div id='menu'>
+    <input id='basic' type='radio' name='rtoggle' value='basic' checked='checked'>
+    <label for='basic'>basic</label>
+    <input id='streets' type='radio' name='rtoggle' value='streets'>
+    <label for='streets'>streets</label>
+    <input id='dark' type='radio' name='rtoggle' value='dark'>
+    <label for='dark'>dark</label>
+    <input id='satellite' type='radio' name='rtoggle' value='satellite'>
+    <label for='satellite'>satellite</label>
   </div>
+  <div id='map'></div>
+</div>
 
 <!-- Home ends  -->
 </body>
 
 <script>
-  var countriesLayer;
-  function highlightFeature(e) {
-    var layer = e.target;
-    layer.setStyle(
-      {
-        weight: 2,
-        color: 'black',
-        fillColor: 'white',
-        fillOpacity: 0.2
-      }
-    );
-    if(!L.Browser.ie && !L.Browser.opera) {
-      layer.bringToFront();
-    }
+  mapboxgl.accessToken = 'pk.eyJ1IjoiYW5zYXJrZXIiLCJhIjoiY2pqb2prODR4MmNpMzNyc28ydXlra2Q4OCJ9.Wm-b1BRlGc1S9q60xCnZlA';
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/basic-v9',
+    zoom: 13,
+    center: [4.899, 52.372]
+  });
+  
+  var layerList = document.getElementById('menu');
+  var inputs = layerList.getElementsByTagName('input');
+
+  function switchLayer(layer) {
+    var layerId = layer.target.id;
+    map.setStyle('mapbox://styles/mapbox/' + layerId + '-v9');
   }
 
-  function resetHighlight(e) {
-    countriesLayer.resetStyle(e.target);
-  }
-
-  function zoomToFeature(e) {
-    map.fitBounds(e.target.getBounds());
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].onclick = switchLayer;
   }
   
-  function countriesOnEachFeature(feature, layer) {
-    layer.on(
-      {
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature
-      }
-    );
-  }
+  // Heatmap example
+  map.on('load', function() {
+    // Add a geojson point source.
+    // Heatmap layers also work with a vector tile source.
+    map.addSource('earthquakes', {
+        "type": "geojson",
+        "data": "https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"
+    });
 
-  function getCountryColor(popEst) {
-    if(popEst > 100000000) {
-      return 'red';
-    } else if(popEst > 50000000) {
-      return 'blue';
-    } else {
-      return 'green';
-    }
-  }
+    map.addLayer({
+        "id": "earthquakes-heat",
+        "type": "heatmap",
+        "source": "earthquakes",
+        "maxzoom": 9,
+        "paint": {
+            // Increase the heatmap weight based on frequency and property magnitude
+            "heatmap-weight": [
+                "interpolate",
+                ["linear"],
+                ["get", "mag"],
+                0, 0,
+                6, 1
+            ],
+            // Increase the heatmap color weight weight by zoom level
+            // heatmap-intensity is a multiplier on top of heatmap-weight
+            "heatmap-intensity": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                0, 1,
+                9, 3
+            ],
+            // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+            // Begin color ramp at 0-stop with a 0-transparancy color
+            // to create a blur-like effect.
+            "heatmap-color": [
+                "interpolate",
+                ["linear"],
+                ["heatmap-density"],
+                0, "rgba(33,102,172,0)",
+                0.2, "rgb(103,169,207)",
+                0.4, "rgb(209,229,240)",
+                0.6, "rgb(253,219,199)",
+                0.8, "rgb(239,138,98)",
+                1, "rgb(178,24,43)"
+            ],
+            // Adjust the heatmap radius by zoom level
+            "heatmap-radius": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                0, 2,
+                9, 20
+            ],
+            // Transition from heatmap to circle layer by zoom level
+            "heatmap-opacity": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                7, 1,
+                9, 0
+            ],
+        }
+    }, 'waterway-label');
 
-  function countriesStyle(feature) {
-    return{
-      fillColor: getCountryColor(feature.properties.POP_EST),
-      weight: 2,
-      opacity: 1,
-      color: 'white',
-      dashArray: 3,
-      fillOpacity: 0.7
-    }
-  }
-  var mymap = L.map('mapid').setView([23.8138137,90.4249708], 6);
+    map.addLayer({
+        "id": "earthquakes-point",
+        "type": "circle",
+        "source": "earthquakes",
+        "minzoom": 7,
+        "paint": {
+            // Size circle radius by earthquake magnitude and zoom level
+            "circle-radius": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                7, [
+                    "interpolate",
+                    ["linear"],
+                    ["get", "mag"],
+                    1, 1,
+                    6, 4
+                ],
+                16, [
+                    "interpolate",
+                    ["linear"],
+                    ["get", "mag"],
+                    1, 5,
+                    6, 50
+                ]
+            ],
+            // Color circle by earthquake magnitude
+            "circle-color": [
+                "interpolate",
+                ["linear"],
+                ["get", "mag"],
+                1, "rgba(33,102,172,0)",
+                2, "rgb(103,169,207)",
+                3, "rgb(209,229,240)",
+                4, "rgb(253,219,199)",
+                5, "rgb(239,138,98)",
+                6, "rgb(178,24,43)"
+            ],
+            "circle-stroke-color": "white",
+            "circle-stroke-width": 1,
+            // Transition from heatmap to circle layer by zoom level
+            "circle-opacity": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                7, 0,
+                8, 1
+            ]
+        }
+    }, 'waterway-label');
+  });
+
+  // Geolocation
+  map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: true
+    },
+    trackUserLocation: true
+  }));
   
-  var googleLayer = new L.Google();
-  mymap.addLayer(googleLayer);
-  
-  countriesLayer = L.geoJson(
-    countries,
-    {
-      style: countriesStyle,
-      onEachFeature: countriesOnEachFeature
-    }
-  ).addTo(mymap);
-  mymap.fitBounds(countriesLayer.getBounds());
+</script>
 
-  var legend = L.control({position: 'bottomright'});
-  legend.onAdd = function(mymap) {
-    var div = L.DomUtil.create('div', 'legend');
-    var labels = [
-      "Population > 100000000",
-      "Population > 50000000",
-      "Population <= 50000000"
-    ];
-    var grades = [100000001, 50000001, 50000000];
-    div.innerHTML = '<div><b>Legend</b></div>';
-    for(var i=0; i<grades.length; i++){
-      div.innerHTML += '<i style="background:'
-      + getCountryColor(grades[i]) + '">&nbsp;&nbsp;</i>&nbsp;&nbsp;'
-      + labels[i] + '<br/>';
-    }
-    return div;
-  }
-  legend.addTo(mymap);
+<script>
+  // var countriesLayer;
+  // function highlightFeature(e) {
+  //   var layer = e.target;
+  //   layer.setStyle(
+  //     {
+  //       weight: 2,
+  //       color: 'black',
+  //       fillColor: 'white',
+  //       fillOpacity: 0.2
+  //     }
+  //   );
+  //   if(!L.Browser.ie && !L.Browser.opera) {
+  //     layer.bringToFront();
+  //   }
+  // }
+
+  // function resetHighlight(e) {
+  //   countriesLayer.resetStyle(e.target);
+  // }
+
+  // function zoomToFeature(e) {
+  //   map.fitBounds(e.target.getBounds());
+  // }
+
+  // function countriesOnEachFeature(feature, layer) {
+  //   layer.on(
+  //     {
+  //       mouseover: highlightFeature,
+  //       mouseout: resetHighlight,
+  //       click: zoomToFeature
+  //     }
+  //   );
+  // }
+
+  // function getCountryColor(popEst) {
+  //   if(popEst > 100000000) {
+  //     return 'red';
+  //   } else if(popEst > 50000000) {
+  //     return 'blue';
+  //   } else {
+  //     return 'green';
+  //   }
+  // }
+
+  // function countriesStyle(feature) {
+  //   return{
+  //     fillColor: getCountryColor(feature.properties.POP_EST),
+  //     weight: 2,
+  //     opacity: 1,
+  //     color: 'white',
+  //     dashArray: 3,
+  //     fillOpacity: 0.7
+  //   }
+  // }
+  // var mymap = L.map('mapid').setView([23.8138137,90.4249708], 6);
+
+  // var googleLayer = new L.Google();
+  // mymap.addLayer(googleLayer);
+
+  // countriesLayer = L.geoJson(
+  //   countries,
+  //   {
+  //     style: countriesStyle,
+  //     onEachFeature: countriesOnEachFeature
+  //   }
+  // ).addTo(mymap);
+  // mymap.fitBounds(countriesLayer.getBounds());
+
+  // var legend = L.control({position: 'bottomright'});
+  // legend.onAdd = function(mymap) {
+  //   var div = L.DomUtil.create('div', 'legend');
+  //   var labels = [
+  //     "Population > 100000000",
+  //     "Population > 50000000",
+  //     "Population <= 50000000"
+  //   ];
+  //   var grades = [100000001, 50000001, 50000000];
+  //   div.innerHTML = '<div><b>Legend</b></div>';
+  //   for(var i=0; i<grades.length; i++){
+  //     div.innerHTML += '<i style="background:'
+  //     + getCountryColor(grades[i]) + '">&nbsp;&nbsp;</i>&nbsp;&nbsp;'
+  //     + labels[i] + '<br/>';
+  //   }
+  //   return div;
+  // }
+  // legend.addTo(mymap);
 
   // var point = [23.8138137,90.4249708];
   // var marker = L.marker(point);
