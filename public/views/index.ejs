@@ -32,11 +32,11 @@
   <!-- <script src="/JS/facebook.js"> </script> -->
   <!-- <script src="/JS/map.js"> </script> -->
 </head>
-</body>
+<body style="background-color:white;margin:0;padding:0">
 <!-- NavBar Starts -->
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
   <!-- Brand -->
-  <a class="navbar-brand" href="#">CrimeAI</a>
+  <a class="navbar-brand" href="#">Crime Watch</a>
 
   <!-- Toggler/collapsibe Button -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -61,11 +61,11 @@
 <!-- NavBar Ends -->
 
 <!-- Home starts -->
-
+<div style="width:100%;height:30%;">
 <!-- Top Bar Message starts -->
-<div class="jumbotron text-center">
-  <img src="https://thumbs.dreamstime.com/b/sitting-duck-saying-cartoon-illustration-37614840.jpg" alt="Sitting Duck" style="width:128px;height:128px;">
-  <h1>Stop Being The Sitting Duck</h1>
+<div class="jumbotron text-center" style="background-color:white;margin:0;padding:0">
+  <img src="https://www.stlucianewsonline.com/wp-content/uploads/2016/11/CWlogo.png" alt="Sitting Duck" style="width:30%;height:20%;">
+  <h1>Watch out for dangerous route you take!</h1>
   <p1>Never Turn A Blind Eye To Crime.</p1>
   <p>A joint effort will reduce crime in our community.</p>
 </div>
@@ -73,7 +73,7 @@
 <!-- <div class="container">
       <img src="http://www.cartographicperspectives.org/index.php/journal/article/viewFile/423/479/2245" alt="Google Map's HeatMaps" style="width:100%;height:100%;">
   </div> -->
-<div class="container">
+<div class="container" style="border-radius: 25px;" >
   <!--<div id='menu'>-->
   <!--  <input id='basic' type='radio' name='rtoggle' value='basic' checked='checked'>-->
   <!--  <label for='basic'>basic</label>-->
@@ -84,9 +84,9 @@
   <!--  <input id='satellite' type='radio' name='rtoggle' value='satellite'>-->
   <!--  <label for='satellite'>satellite</label>-->
   <!--</div>-->
-  <div id='map'></div>
+  <div id='map' style="border-radius: 25px;"></div>
 </div>
-
+</div>
 <!-- Home ends  -->
 </body>
 
@@ -181,7 +181,7 @@
         "id": "earthquakes-point",
         "type": "circle",
         "source": "earthquakes",
-        "minzoom": 7,
+        "minzoom": 4,
         "paint": {
             // Size circle radius by earthquake magnitude and zoom level
             "circle-radius": [
@@ -215,7 +215,7 @@
                 5, "rgb(239,138,98)",
                 6, "rgb(178,24,43)"
             ],
-            "circle-stroke-color": "white",
+            "circle-stroke-color": "red",
             "circle-stroke-width": 1,
             // Transition from heatmap to circle layer by zoom level
             "circle-opacity": [
