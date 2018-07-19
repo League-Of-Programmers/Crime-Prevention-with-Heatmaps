@@ -110,21 +110,13 @@
     inputs[i].onclick = switchLayer;
   }
 
-  // Geolocation
-  map.addControl(new mapboxgl.GeolocateControl({
-    positionOptions: {
-        enableHighAccuracy: true
-    },
-    trackUserLocation: true
-  }));
-  
   // Heatmap example
   map.on('load', function() {
     // Add a geojson point source.
     // Heatmap layers also work with a vector tile source.
     map.addSource('earthquakes', {
         "type": "geojson",
-        "data": "https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"
+        "data": "/assets/data/earthquakes.geojson"
     });
 
     map.addLayer({
@@ -234,5 +226,14 @@
         }
     }, 'waterway-label');
   });
+
+  // Geolocation
+  map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: true
+    },
+    trackUserLocation: true
+  }));
+  
 </script>
 </html>
